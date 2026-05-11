@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sana Bir Mesajım Var ❤️</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #0a0a0a;
+            color: #fff;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        /* Havai Fişek Efekti İçin Canvas */
+        #canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+        }
+
+        /* Mektup Zarfı */
+        .envelope-wrapper {
+            position: relative;
+            z-index: 10;
+            cursor: pointer;
+            transition: transform 0.5s ease;
+        }
+
+        .envelope-wrapper:hover {
+            transform: scale(1.1);
+        }
+
+        .envelope {
+            width: 150px;
+            height: 100px;
+            background: #d11a2a;
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-radius: 5px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+
+        .envelope::after {
+            content: "❤️";
+            font-size: 2rem;
+        }
+
+        /* Mektup İçeriği (Başlangıçta Gizli) */
+        #letter-content {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 80%;
+            max-width: 500px;
+            max-height: 70vh;
+            background: rgba(20, 20, 20, 0.95);
+            padding: 30px;
+            border: 2px solid #ff4d6d;
+            border-radius: 20px;
+            z-index: 20;
+            overflow-y: auto;
+            text-align: center;
+            box-shadow: 0 0 50px rgba(255, 77, 109, 0.3);
+            line-height: 1.6;
+        }
+
+        h2 { color: #ff4d6d; }
+        .text { font-size: 1.1rem; white-space: pre-line; }
+
+        /* Kapatma Butonu */
+        .close-btn {
+            margin-top: 20px;
+            background: #ff4d6d;
+            border: none;
+            padding: 10px 20px;
+            color: white;
+            border-radius: 10px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+
+    <canvas id="canvas"></canvas>
+
+    <div class="envelope-wrapper" id="envelope" onclick="openLetter()">
+        <div class="envelope"></div>
+        <p style="text-align: center; margin-top: 10px; font-weight: bold;">Tıkla ve Aç 💌</p>
+    </div>
+
+    <div id="letter-content">
+        <h2>Canım Saide'ye... 🌹</h2>
+        <div class="text">
+            Hayatımın en güzel detayı, 🌸
+
+            Bu sayfayı sana özel hazırlamak istedim çünkü senin varlığın hayatıma giren en parlak ışık. 9 Ekim'den beri kalbim bambaşka atıyor. ✨ Her anımızda, her gülüşünde dünyam biraz daha güzelleşiyor. Seninle geçen her saniye benim için bir hazine değerinde. 💎
+
+            Gözlerindeki o huzuru hiçbir şeye değişmem. 🌊 İyi ki varsın, iyi ki hayatımdasın. Seni her gün bir öncekinden daha çok seviyorum. ❤️ Sen benim en güzel manzaram, en tatlı uykum ve en huzurlu limanımsın. ⚓️
+
+            Birlikte daha nice güzel anılar biriktireceğimiz, ellerimizin hiç ayrılmayacağı bir ömre... 🥂 Seninle her şey çok daha anlamlı ve renkli. 🌈
+
+            Seni seviyorum prensesim! 😍🥰😘🔥💕
+            Her zaman seninleyim... ✨💖
+        </div>
+        <button class="close-btn" onclick="closeLetter()">Kapat</button>
+    </div>
+
+    <script>
+        // Havai Fişek Animasyonu
+        const canvas = document.getElementById('canvas');
+        const ctx = canvas.getContext('2d');
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        let particles = [];
+
+        class Particle {
+            constructor(x, y, color) {
+                this.x = x;
+                this.y = y;
+                this.color = color;
+                this.velocity = {
+                    x: (Math.random() - 0.5) * 8,
+                    y: (Math.random() - 0.5) * 8
+                };
+                this.alpha = 1;
+                this.friction = 0.95;
+            }
+
+            draw() {
+                ctx.globalAlpha = this.alpha;
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, 2, 0, Math.PI * 2);
+                ctx.fillStyle = this.color;
+                ctx.fill();
+            }
+
+            update() {
+                this.velocity.x *= this.friction;
+                this.velocity.y *= this.friction;
+                this.x += this.velocity.x;
+                this.y += this.velocity.y;
+                this.alpha -= 0.01;
+            }
+        }
+
+        function createFirework() {
+            const x = Math.random() * canvas.width;
+            const y = Math.random() * canvas.height / 2;
+            const color = `hsl(${Math.random() * 360}, 50%, 50%)`;
+            for (let i = 0; i < 30; i++) {
+                particles.push(new Particle(x, y, color));
+            }
+        }
+
+        function animate() {
+            requestAnimationFrame(animate);
+            ctx.fillStyle = 'rgba(10, 10, 10, 0.1)';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            
+            particles.forEach((p, i) => {
+                if (p.alpha > 0) {
+                    p.update();
+                    p.draw();
+                } else {
+                    particles.splice(i, 1);
+                }
+            });
+
+            if (Math.random() < 0.05) createFirework();
+        }
+
+        animate();
+
+        // Mektup Fonksiyonları
+        function openLetter() {
+            document.getElementById('envelope').style.display = 'none';
+            document.getElementById('letter-content').style.display = 'block';
+        }
+
+        function closeLetter() {
+            document.getElementById('envelope').style.display = 'block';
+            document.getElementById('letter-content').style.display = 'none';
+        }
+    </script>
+</body>
+</html>
