@@ -3,152 +3,214 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sana Bir Mesajım Var ❤️</title>
+    <title>Sonsuza Dek... ❤️</title>
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Montserrat:wght@300;600&display=swap');
+
+        :root {
+            --primary: #ff0055;
+            --secondary: #6600ff;
+            --glass: rgba(255, 255, 255, 0.1);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
         body {
-            margin: 0;
-            padding: 0;
-            background-color: #0a0a0a;
-            color: #fff;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            overflow: hidden;
+            background: #000;
+            height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 100vh;
+            font-family: 'Montserrat', sans-serif;
+            overflow: hidden;
+            perspective: 1000px;
         }
 
-        /* Havai Fişek Efekti İçin Canvas */
-        #canvas {
+        canvas {
             position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
+            top: 0; left: 0;
             z-index: 1;
+            pointer-events: none;
         }
 
-        /* Mektup Zarfı */
-        .envelope-wrapper {
+        /* --- ULTRA MODERN ENVELOPE --- */
+        .scene {
             position: relative;
             z-index: 10;
-            cursor: pointer;
-            transition: transform 0.5s ease;
-        }
-
-        .envelope-wrapper:hover {
-            transform: scale(1.1);
+            transition: transform 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
 
         .envelope {
-            width: 150px;
-            height: 100px;
-            background: #d11a2a;
+            width: 280px;
+            height: 180px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border-radius: 15px;
+            cursor: pointer;
             position: relative;
+            box-shadow: 0 0 50px rgba(255, 0, 85, 0.4);
             display: flex;
             justify-content: center;
             align-items: center;
-            border-radius: 5px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            transition: 0.5s;
         }
 
-        .envelope::after {
-            content: "❤️";
-            font-size: 2rem;
+        .envelope:hover {
+            transform: scale(1.05) rotate(-2deg);
+            box-shadow: 0 0 80px rgba(255, 0, 85, 0.6);
         }
 
-        /* Mektup İçeriği (Başlangıçta Gizli) */
-        #letter-content {
+        .heart {
+            font-size: 50px;
+            filter: drop-shadow(0 0 20px #fff);
+            animation: pulse 1.5s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); filter: drop-shadow(0 0 10px #fff); }
+            50% { transform: scale(1.3); filter: drop-shadow(0 0 30px var(--primary)); }
+            100% { transform: scale(1); filter: drop-shadow(0 0 10px #fff); }
+        }
+
+        /* --- THE MASTERPIECE LETTER --- */
+        #letter-overlay {
             display: none;
             position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 80%;
-            max-width: 500px;
-            max-height: 70vh;
-            background: rgba(20, 20, 20, 0.95);
-            padding: 30px;
-            border: 2px solid #ff4d6d;
-            border-radius: 20px;
-            z-index: 20;
-            overflow-y: auto;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: rgba(0,0,0,0.85);
+            backdrop-filter: blur(10px);
+            z-index: 100;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .letter-card {
+            background: var(--glass);
+            border: 1px solid rgba(255,255,255,0.2);
+            padding: 40px;
+            border-radius: 30px;
+            max-width: 550px;
+            width: 100%;
             text-align: center;
-            box-shadow: 0 0 50px rgba(255, 77, 109, 0.3);
-            line-height: 1.6;
+            box-shadow: 0 0 100px rgba(102, 0, 255, 0.3);
+            position: relative;
+            animation: slideIn 1s cubic-bezier(0.23, 1, 0.32, 1);
         }
 
-        h2 { color: #ff4d6d; }
-        .text { font-size: 1.1rem; white-space: pre-line; }
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateY(100px) scale(0.8); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
+        }
 
-        /* Kapatma Butonu */
+        .letter-header {
+            font-family: 'Dancing Script', cursive;
+            font-size: 3.5rem;
+            background: linear-gradient(to right, #ff0055, #ff758f);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 20px;
+        }
+
+        .letter-body {
+            color: #eee;
+            line-height: 1.8;
+            font-size: 1.1rem;
+            font-weight: 300;
+            max-height: 350px;
+            overflow-y: auto;
+            padding-right: 10px;
+        }
+
+        .date-badge {
+            display: inline-block;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            color: var(--primary);
+            margin-bottom: 15px;
+            border: 1px solid var(--primary);
+        }
+
         .close-btn {
-            margin-top: 20px;
-            background: #ff4d6d;
-            border: none;
-            padding: 10px 20px;
+            margin-top: 30px;
+            background: transparent;
+            border: 2px solid var(--primary);
             color: white;
-            border-radius: 10px;
+            padding: 12px 35px;
+            border-radius: 50px;
             cursor: pointer;
+            font-weight: 600;
+            transition: 0.4s;
+            text-transform: uppercase;
+            letter-spacing: 2px;
         }
+
+        .close-btn:hover {
+            background: var(--primary);
+            box-shadow: 0 0 30px var(--primary);
+        }
+
+        /* Custom Scrollbar */
+        .letter-body::-webkit-scrollbar { width: 5px; }
+        .letter-body::-webkit-scrollbar-thumb { background: var(--primary); border-radius: 10px; }
+
     </style>
 </head>
 <body>
 
-    <canvas id="canvas"></canvas>
+    <canvas id="fireworks"></canvas>
 
-    <div class="envelope-wrapper" id="envelope" onclick="openLetter()">
-        <div class="envelope"></div>
-        <p style="text-align: center; margin-top: 10px; font-weight: bold;">Tıkla ve Aç 💌</p>
+    <div class="scene" id="envelope-scene" onclick="openLetter()">
+        <div class="envelope">
+            <div class="heart">❤️</div>
+        </div>
+        <p style="color: white; text-align: center; margin-top: 20px; letter-spacing: 3px; font-size: 0.8rem; opacity: 0.7;">DOKUN VE HİSSET</p>
     </div>
 
-    <div id="letter-content">
-        <h2>Canım Saide'ye... 🌹</h2>
-        <div class="text">
-            Hayatımın en güzel detayı, 🌸
-
-            Bu sayfayı sana özel hazırlamak istedim çünkü senin varlığın hayatıma giren en parlak ışık. 9 Ekim'den beri kalbim bambaşka atıyor. ✨ Her anımızda, her gülüşünde dünyam biraz daha güzelleşiyor. Seninle geçen her saniye benim için bir hazine değerinde. 💎
-
-            Gözlerindeki o huzuru hiçbir şeye değişmem. 🌊 İyi ki varsın, iyi ki hayatımdasın. Seni her gün bir öncekinden daha çok seviyorum. ❤️ Sen benim en güzel manzaram, en tatlı uykum ve en huzurlu limanımsın. ⚓️
-
-            Birlikte daha nice güzel anılar biriktireceğimiz, ellerimizin hiç ayrılmayacağı bir ömre... 🥂 Seninle her şey çok daha anlamlı ve renkli. 🌈
-
-            Seni seviyorum prensesim! 😍🥰😘🔥💕
-            Her zaman seninleyim... ✨💖
+    <div id="letter-overlay">
+        <div class="letter-card">
+            <div class="date-badge">9 Ekim 2024 ✨</div>
+            <h1 class="letter-header">Canım Saide,</h1>
+            <div class="letter-body">
+                Hayatımın en güzel hikayesi seninle başladı. 📖 Seninle geçen her gün, her saniye bana ne kadar şanslı olduğumu hatırlatıyor. Gözlerine her baktığımda, içinde kaybolmak istediğim uçsuz bucaksız bir evren görüyorum. 🌌 <br><br>
+                Kalbimin ritmini değiştiren, her sabah uyanma sebebim olan o eşsiz gülüşün hiç solmasın. 🌹 Seninle 9 Ekim'den beri kurduğumuz bu dünya, benim en güvenli, en huzurlu limanım oldu. ⚓️ <br><br>
+                Sana olan aşkım kelimelere sığmayacak kadar büyük, yıldızlar kadar sonsuz. ✨ İyi ki benimlesin, iyi ki varsın bir tanem. Birlikte daha nice muhteşem anılara, sonsuz mutluluklara... 🥂💍 <br><br>
+                Seni her şeyden, herkesten çok seviyorum! 😍🥰😘💖🔥🌈✨🧿
+            </div>
+            <button class="close-btn" onclick="closeLetter()">Kapat</button>
         </div>
-        <button class="close-btn" onclick="closeLetter()">Kapat</button>
     </div>
 
     <script>
-        // Havai Fişek Animasyonu
-        const canvas = document.getElementById('canvas');
+        const canvas = document.getElementById('fireworks');
         const ctx = canvas.getContext('2d');
-        canvas.width = window.innerWidth;
-        canvas.height = window.innerHeight;
-
         let particles = [];
 
-        class Particle {
-            constructor(x, y, color) {
-                this.x = x;
-                this.y = y;
-                this.color = color;
-                this.velocity = {
-                    x: (Math.random() - 0.5) * 8,
-                    y: (Math.random() - 0.5) * 8
-                };
-                this.alpha = 1;
-                this.friction = 0.95;
-            }
+        function resize() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resize);
+        resize();
 
+        class Particle {
+            constructor(x, y, color, velocity) {
+                this.x = x; this.y = y; this.color = color; this.velocity = velocity;
+                this.alpha = 1; this.friction = 0.95;
+            }
             draw() {
+                ctx.save();
                 ctx.globalAlpha = this.alpha;
                 ctx.beginPath();
                 ctx.arc(this.x, this.y, 2, 0, Math.PI * 2);
                 ctx.fillStyle = this.color;
+                ctx.shadowBlur = 10;
+                ctx.shadowColor = this.color;
                 ctx.fill();
+                ctx.restore();
             }
-
             update() {
                 this.velocity.x *= this.friction;
                 this.velocity.y *= this.friction;
@@ -158,43 +220,43 @@
             }
         }
 
-        function createFirework() {
-            const x = Math.random() * canvas.width;
-            const y = Math.random() * canvas.height / 2;
-            const color = `hsl(${Math.random() * 360}, 50%, 50%)`;
-            for (let i = 0; i < 30; i++) {
-                particles.push(new Particle(x, y, color));
+        function spawnFireworks(x, y) {
+            const count = 40;
+            const angleStep = (Math.PI * 2) / count;
+            const color = `hsl(${Math.random() * 360}, 100%, 60%)`;
+            for (let i = 0; i < count; i++) {
+                particles.push(new Particle(x, y, color, {
+                    x: Math.cos(angleStep * i) * (Math.random() * 6),
+                    y: Math.sin(angleStep * i) * (Math.random() * 6)
+                }));
             }
         }
 
         function animate() {
-            requestAnimationFrame(animate);
-            ctx.fillStyle = 'rgba(10, 10, 10, 0.1)';
+            ctx.fillStyle = 'rgba(0, 0, 0, 0.1)';
             ctx.fillRect(0, 0, canvas.width, canvas.height);
-            
             particles.forEach((p, i) => {
-                if (p.alpha > 0) {
-                    p.update();
-                    p.draw();
-                } else {
-                    particles.splice(i, 1);
-                }
+                if (p.alpha > 0) { p.update(); p.draw(); }
+                else { particles.splice(i, 1); }
             });
-
-            if (Math.random() < 0.05) createFirework();
+            if (Math.random() < 0.04) spawnFireworks(Math.random() * canvas.width, Math.random() * canvas.height);
+            requestAnimationFrame(animate);
         }
 
         animate();
 
-        // Mektup Fonksiyonları
+        window.addEventListener('mousedown', (e) => spawnFireworks(e.clientX, e.clientY));
+
         function openLetter() {
-            document.getElementById('envelope').style.display = 'none';
-            document.getElementById('letter-content').style.display = 'block';
+            document.getElementById('envelope-scene').style.transform = 'scale(0) rotate(20deg)';
+            setTimeout(() => {
+                document.getElementById('letter-overlay').style.display = 'flex';
+            }, 400);
         }
 
         function closeLetter() {
-            document.getElementById('envelope').style.display = 'block';
-            document.getElementById('letter-content').style.display = 'none';
+            document.getElementById('letter-overlay').style.display = 'none';
+            document.getElementById('envelope-scene').style.transform = 'scale(1) rotate(0)';
         }
     </script>
 </body>
